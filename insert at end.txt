@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>  
+
+struct node {
+    int data;
+    struct node *next;
+} *newNode, *head = NULL, *tail = NULL;
+
+int main() {
+    int val;
+    char choice;
+
+    do {
+        newNode = (struct node *)malloc(sizeof(struct node));
+
+        printf("Enter a value: ");
+        scanf("%d", &val);
+
+        newNode->data = val;
+        newNode->next = NULL;  
+
+        if (head == NULL) {  
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail->next = newNode;   
+            tail = newNode;        
+        }
+
+        printf("Do you want to add another node? (y/n): ");
+        scanf(" %c", &choice);
+
+    } while (choice == 'y' || choice == 'Y');
+
+    struct node *temp = head;
+    printf("The linked list is: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+
+    return 0;
+}

@@ -1,0 +1,127 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct poly {
+    int coeff;
+    int pow;
+    struct poly* Next;
+};
+
+typedef struct poly Poly;
+
+void create(Poly* List);
+void display(Poly* List);
+void addition(Poly* Poly1, Poly* Poly2, Poly* result);
+
+int main() {
+    Poly* Poly1 = malloc(sizeof(Poly));
+    Poly* Poly2 = malloc(sizeof(Poly));
+    Poly* result = malloc(sizeof(Poly));
+
+    Poly1->Next = NULL;  
+    Poly2->Next = NULL;  
+    printf("Enter the 1st polynomial numbers:\n");
+    create(Poly1);
+    printf("Equation is: ");
+    display(Poly1);
+
+    printf("Enter the 2nd polynomial numbers:\n");
+    create(Poly2);
+    printf("Equation is: ");
+    display(Poly2);
+
+    addition(Poly1, Poly2, result);
+    printf("Sum of polynomials: ");
+    display(result);
+    
+   
+
+    return 0;
+}
+
+void create(Poly* List) {
+    int choice;
+    Poly* position, * NewNode;
+    position = List;
+
+    do {
+        NewNode = malloc(sizeof(Poly));
+        printf("Enter the coeff: ");
+        scanf("%d", &NewNode->coeff);   
+        printf("Enter the pow: ");
+        scanf("%d", &NewNode->pow);     
+
+        NewNode->Next = NULL;
+        position->Next = NewNode;
+        position = NewNode;
+
+        printf("Enter 1 to continue, 0 to stop: ");
+        scanf("%d", &choice);
+
+    } while (choice == 1);
+}
+
+void display(Poly* List) {
+    Poly* position;
+    position = List->Next; 
+    while (position != NULL) {
+        printf("%dx^%d", position->coeff, position->pow);
+        position = position->Next;
+
+        if (position != NULL && position->coeff > 0) {
+            printf(" + ");  
+        }
+    }
+    printf("\n");  
+}
+
+void addition(Poly* Poly1, Poly* Poly2, Poly* result) {
+    Poly* position = result;  
+    Poly1 = Poly1->Next;      
+    Poly2 = Poly2->Next;      
+
+    result->Next = NULL; 
+    while (Poly1 != NULL && Poly2 != NULL) {
+        Poly* NewNode = malloc(sizeof(Poly));
+        
+        if (Poly1->pow == Poly2->pow) {
+            NewNode->coeff = Poly1->coeff + Poly2->coeff;
+            NewNode->pow = Poly1->pow; 
+            Poly1 = Poly1->Next;
+            Poly2 = Poly2->Next;
+        } else if (Poly1->pow > Poly2->pow) {
+            NewNode->coeff = Poly1->coeff;
+            NewNode->pow = Poly1->pow;
+            Poly1 = Poly1->Next;
+        } else {
+            NewNode->coeff = Poly2->coeff;
+            NewNode->pow = Poly2->pow;
+            Poly2 = Poly2->Next;
+        }
+
+        NewNode->Next = NULL;
+        position->Next = NewNode;
+        position = NewNode; 
+    }
+
+    
+    while (Poly1 != NULL) {
+        Poly* NewNode = malloc(sizeof(Poly));
+        NewNode->coeff = Poly1->coeff;
+        NewNode->pow = Poly1->pow;
+        NewNode->Next = NULL;
+        position->Next = NewNode;
+        position = NewNode;
+        Poly1 = Poly1->Next;
+    }
+
+    while (Poly2 != NULL) {
+        Poly* NewNode = malloc(sizeof(Poly));
+        NewNode->coeff = Poly2->coeff;
+        NewNode->pow = Poly2->pow;
+        NewNode->Next = NULL;
+        position->Next = NewNode;
+        position = NewNode;
+        Poly2 = Poly2->Next;
+    }
+}

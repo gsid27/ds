@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+} *head = NULL;
+
+void deleteAtEnd() {
+    if (head == NULL) {
+        printf("The list is empty. Nothing to delete.\n");
+        return;
+    }
+    
+    if (head->next == NULL) { 
+        printf("Deleted node with value: %d\n", head->data);
+        free(head);
+        head = NULL;
+        return;
+    }
+    
+    struct node *temp = head;
+    while (temp->next->next != NULL) {  
+        temp = temp->next;
+    }
+
+    printf("Deleted node with value: %d\n", temp->next->data);
+    free(temp->next);  
+    temp->next = NULL;   
+}
+
+void insertAtEnd(int val) {
+    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->data = val;
+    newNode->next = NULL;
+
+    if (head == NULL) {
+        head = newNode;
+    } else {
+        struct node *temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+void printList() {
+    struct node *temp = head;
+    printf("The linked list is: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    int val;
+    char choice;
+
+    do {
+        printf("Enter a value to insert at the end: ");
+        scanf("%d", &val);
+        insertAtEnd(val);
+
+        printf("Do you want to add another node? (y/n): ");
+        scanf(" %c", &choice);
+    } while (choice == 'y' || choice == 'Y');
+
+    printf("\nBefore deletion:\n");
+    printList();
+
+    deleteAtEnd();  
+
+    printf("\nAfter deletion:\n");
+    printList();
+
+    return 0;
+}

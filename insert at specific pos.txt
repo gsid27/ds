@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>  
+
+struct node {
+    int data;
+    struct node *next;
+} *newNode, *head = NULL;
+
+void insertAtPosition(int val, int pos) {
+    newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->data = val;
+
+    if (pos == 1) {  
+        newNode->next = head;
+        head = newNode;
+        return;
+    }
+
+    struct node *temp = head;
+    for (int i = 1; i < pos - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of bounds\n");
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+int main() {
+    int val, pos;
+    char choice;
+
+    do {
+        printf("Enter a value: ");
+        scanf("%d", &val);
+        printf("Enter the position to insert the node: ");
+        scanf("%d", &pos);
+
+        insertAtPosition(val, pos);
+
+        printf("Do you want to add another node? (y/n): ");
+        scanf(" %c", &choice);
+
+    } while (choice == 'y' || choice == 'Y');
+
+    struct node *temp = head;
+    printf("The linked list is: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+
+    return 0;
+}
